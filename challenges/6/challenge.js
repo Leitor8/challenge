@@ -46,6 +46,58 @@
 *    ]
  */
 
-const combinate = (set, target) => {}
+const combinate = (set, target) => {
+    //assumindo uma array set ordenada e sem  repetidos.
+    if(set.length == 0) return [];
+    let result = [];
+    let sum = 0;
+    let hash = {} //evitar repetidos
+    for(let i = 0; i < set.length; i++) {
+        
+        if(target % set[i] == 0 && set[i] != target){ //caso o valor seja um multiplo ex. [2, 2, 2] para 6
+            let line  = [];
+            for(let j = 0; j < (target / set[i]); j++) {   
+                line.push(set[i]);
+            }
+            result.push(line.sort());
+            hash[result[result.length -1]] = result.length -1;
+        }
+
+        if(set[i] == target) { //caso o valor seja igual
+            let line = [set[i]];
+            result.push(line.sort());
+            hash[result[result.length -1]] = result.length -1;
+            break;
+        }
+
+        if(set[i] > target) { //caso o valaor seja ultrapassado
+            break;
+        }
+
+        for(let j = 0; j < set.length; j++) { 
+            //verificação de casos onde um valor somado a múltiplos de um segundo valor ex. [2, 2, 3] para 7
+            if (set[i] == set[j]) continue;
+            let subtraction = (target - set[i]);
+            if(subtraction % set[j] == 0) {
+                line = [];
+                
+                for(let k = 0; k < (subtraction / set[j]); k++) {
+                    line.push(set[j]);
+                }
+                
+                line.push(set[i]);
+                line.sort();
+                
+                if(!hash.hasOwnProperty(line)){
+                    result.push(line);
+                    hash[result[result.length -1]] = result.length -1;
+                }
+                    
+            }
+        }
+    }
+    return result;
+}
+
 
 module.exports = combinate

@@ -17,6 +17,13 @@
  * a > b sempre.
  */
 
-const MDC = (a, b) => {}
+const MDC = (a, b) => {
+    //dado que a > b, so checo b
+    if(b ==  0)
+        return a;
+
+    var resto = a % b;
+    return MDC(b, resto)
+}
 
 module.exports = MDC

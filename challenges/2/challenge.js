@@ -52,6 +52,37 @@
  *  }
  */
 
-const normalizeData = unormalized => {}
+const normalizeData = unormalized => {
+    let normalized = {};
+
+    //results section
+    let id = unormalized.id;
+    normalized["results"] = {};
+    normalized["results"][id] = {};
+    normalized["results"][id]["id"]      = id;
+    normalized["results"][id]["user"]    = unormalized.user.id;
+    normalized["results"][id]["reports"] = [];
+
+    //users section
+    let userId = unormalized.user.id;
+    normalized["users"] = {};
+    normalized["users"][userId] = {};
+    normalized["users"][userId]["id"]   = userId;
+    normalized["users"][userId]["name"] = unormalized.user.name;
+
+    //reports section
+    normalized["reports"] = {};
+    unormalized.reports.forEach(report => {
+        //terminando o user
+        normalized["results"][id]["reports"].push(report.id);
+
+        normalized["reports"][report.id] = {};
+        normalized["reports"][report.id]["id"]       = report.id;
+        normalized["reports"][report.id]["user"]     = userId;
+        normalized["reports"][report.id]["document"] = report.result.document;
+        normalized["reports"][report.id]["status"]   = report.result.status;
+    });
+    return normalized;
+}
 
 module.exports = normalizeData

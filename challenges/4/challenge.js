@@ -26,7 +26,42 @@
  * }
  */
 
-const extractSize = htmlTemplate => {}
+const extractSize = htmlTemplate => {
+    let result = {
+        width: 0,
+        height: 0
+    };
+    //a principio cogitei fazer por regex, mas acredito que desta forma eu consiga mostrar melhor meu raciocínio para o teste.
+    //eu usaria as regex: /width: \d*/s e /height: \d*/s e depois a substring do resultaado.
+    const searchWidth  = "width: ";
+    const searchHeight = "height: ";
+    let widthIndex  = htmlTemplate.search(searchWidth);
+    let heightIndex = htmlTemplate.search(searchHeight);
+
+    if(widthIndex !=  -1){
+        let width = "";
+        for(let i = widthIndex + searchWidth.length; i < htmlTemplate.length; i++)  {
+            //para caso hajam valores decimais, como é comum com 'em' ou 'r em'
+            if(isNaN(htmlTemplate[i]) && htmlTemplate[i] != '.')  
+                break;
+            width += htmlTemplate[i];
+        }
+        result.width  = parseFloat(width);
+    }
+
+    if(heightIndex != -1){
+        let height = "";
+        for(let i  = heightIndex + searchHeight.length; i < htmlTemplate.length; i++) {
+            //para caso hajam valores decimais, como é comum com 'em' ou 'rem'
+            if(isNaN(htmlTemplate[i]) && htmlTemplate[i] != '.') 
+                break;
+            height += htmlTemplate[i];
+        }
+        result.height = parseFloat(height);
+    }
+
+    return result;
+}
 
 module.exports = extractSize;
 
